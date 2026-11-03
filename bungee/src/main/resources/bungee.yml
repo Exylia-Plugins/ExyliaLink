@@ -1,0 +1,7 @@
+name: ExyliaLink
+version: '${version}'
+main: net.exylia.link.bungee.LinkBungee
+author: DiGround
+description: Links Minecraft accounts to Discord through Exylia Link.
+softDepends:
+  - LuckPerms

@@ -1,0 +1,176 @@
+# Exylia Link messages. A key holds one line or a list of lines; an empty line is not sent and
+# '&r' sends a blank one. Colours: <#rrggbb>, &-codes, {primary}-style palette names. Clicks and
+# hovers: <click:run_command:/link>…</click>, <hover:show_text:'…'>…</hover>. A line may start with
+# [sound:<key>|<volume>|<pitch>] (played to that player on game servers) and/or [center].
+prefix: '<#8a51c4>&lEXYLIA LINK <#a89ab5>•<reset>'
+link:
+  # /link: the code to use in Discord. %code%, %url% (the network's link page), %time%.
+  code:
+    - '&r'
+    - '[center]<#8a51c4>&lLINK YOUR DISCORD'
+    - '&r'
+    - ' <#a89ab5>▎ <#e7cfff>Your code <#a89ab5>» <click:copy_to_clipboard:%code%><hover:show_text:''<#e7cfff>Click to copy''><#ffd700>&l%code%</hover></click> <#868e96>(click to copy)'
+    - ' <#a89ab5>▎ <#e7cfff>Run <#59a4ff>/link %code% <#e7cfff>in our Discord'
+    - ' <#a89ab5>▎ <#e7cfff>or enter it at <click:open_url:%url%><hover:show_text:''<#e7cfff>Open the link page''><#59a4ff>%url%</hover></click>'
+    - '&r'
+    - ' <#a89ab5>▎ <#e7cfff>Expires in <#59a4ff>%time% ⌚'
+    - '&r'
+  # /link <code> worked. %discord% is the Discord username.
+  redeemed: '[sound:entity.experience_orb.pickup|0.6|1.4]%prefix% <#8fffc1>Linked to <#ffd700>%discord%<#8fffc1>. Welcome aboard!'
+  # Sent when the account becomes linked from anywhere else (Discord, the web).
+  linked: '[sound:entity.experience_orb.pickup|0.6|1.4]%prefix% <#8fffc1>Your account is now linked to <#ffd700>%discord%<#8fffc1>.'
+  # Sent when the account is unlinked from anywhere.
+  unlinked: '[sound:block.note_block.bass|0.5|0.8]%prefix% <#e7cfff>Your account is no longer linked to Discord.'
+  # /link status. %discord%, %discord_id%.
+  status-linked:
+    - '&r'
+    - '[center]<#8a51c4>&lDISCORD LINK'
+    - '&r'
+    - ' <#a89ab5>▎ <#e7cfff>Status <#a89ab5>» <#8fffc1>Linked'
+    - ' <#a89ab5>▎ <#e7cfff>Discord <#a89ab5>» <#ffd700>%discord%'
+    - '&r'
+    - '<#ff9500>➥ <#e7cfff>Run <#59a4ff>/unlink <#e7cfff>to remove it'
+    - '&r'
+  status-unlinked:
+    - '&r'
+    - '[center]<#8a51c4>&lDISCORD LINK'
+    - '&r'
+    - ' <#a89ab5>▎ <#e7cfff>Status <#a89ab5>» <#868e96>Not linked'
+    - '&r'
+    - '<#ff9500>➥ <#e7cfff>Run <#59a4ff>/link <#e7cfff>to get a code'
+    - '&r'
+  # /unlink asks first; the button (or /unlink confirm) within 30s goes ahead. %discord%.
+  unlink-confirm:
+    - '%prefix% <#e7cfff>Unlink your account from <#ffd700>%discord%<#e7cfff>?'
+    - '<click:run_command:/unlink confirm><hover:show_text:''<#e7cfff>Unlink now''><#a33b53>&l[✔ UNLINK]</hover></click> <#a89ab5>You have <#59a4ff>30s ⌚ <#a89ab5>to confirm.'
+  unlink-done: '[sound:entity.experience_orb.pickup|0.6|1.4]%prefix% <#8fffc1>Your account is no longer linked.'
+  not-linked: '[sound:entity.villager.no|0.6|1.0]%prefix% <#e7cfff>Your account is not linked. Run <#59a4ff>/link <#e7cfff>to link it.'
+errors:
+  # The connection to Exylia Link is down or did not answer in time.
+  offline: '[sound:entity.villager.no|0.6|1.0]%prefix% <#a33b53>Discord linking is unavailable right now. <#e7cfff>Try again in a moment.'
+  # %time% is how long to wait.
+  rate-limited: '[sound:entity.villager.no|0.6|1.0]%prefix% <#e7cfff>Slow down, try again in <#59a4ff>%time% ⌚<#e7cfff>.'
+  cooldown: '[sound:entity.villager.no|0.6|1.0]%prefix% <#e7cfff>You can link again in <#59a4ff>%time% ⌚<#e7cfff>.'
+  already-linked: '[sound:entity.villager.no|0.6|1.0]%prefix% <#e7cfff>You are already linked. Run <#59a4ff>/unlink <#e7cfff>first.'
+  uuid-taken: '[sound:entity.villager.no|0.6|1.0]%prefix% <#e7cfff>You are already linked. Run <#59a4ff>/unlink <#e7cfff>first.'
+  discord-taken: '[sound:entity.villager.no|0.6|1.0]%prefix% <#a33b53>That Discord account is already linked <#e7cfff>to another Minecraft account.'
+  code-invalid: '[sound:entity.villager.no|0.6|1.0]%prefix% <#a33b53>That code is not valid. <#e7cfff>Run <#59a4ff>/link <#e7cfff>in Discord for a new one.'
+  self-unlink-disabled: '[sound:entity.villager.no|0.6|1.0]%prefix% <#e7cfff>Unlinking is disabled on this network. Ask a staff member.'
+  # %error% is the gateway's error code.
+  internal: '[sound:entity.villager.no|0.6|1.0]%prefix% <#a33b53>Something went wrong <#868e96>(%error%)<#a33b53>. <#e7cfff>Try again later.'
+  players-only: '%prefix% <#e7cfff>Only players can do that.'
+  no-permission: '[sound:entity.villager.no|0.6|1.0]%prefix% <#a33b53>You do not have permission to do that.'
+admin:
+  usage:
+    - '&r'
+    - '[center]<#8a51c4>&lEXYLIA LINK'
+    - '&r'
+    - ' <#a89ab5>▎ <#59a4ff>/linkadmin connect <#a89ab5>» <#e7cfff>link the network'
+    - ' <#a89ab5>▎ <#59a4ff>/linkadmin status <#a89ab5>» <#e7cfff>connection and network'
+    - ' <#a89ab5>▎ <#59a4ff>/linkadmin disconnect <#a89ab5>» <#e7cfff>forget the network here'
+    - ' <#a89ab5>▎ <#59a4ff>/linkadmin unlink <player> <#a89ab5>» <#e7cfff>unlink someone'
+    - ' <#a89ab5>▎ <#59a4ff>/linkadmin import discordsrv <#a89ab5>» <#e7cfff>bring DiscordSRV links'
+    - ' <#a89ab5>▎ <#59a4ff>/linkadmin reload <#a89ab5>» <#e7cfff>reload the files'
+    - '&r'
+  # /linkadmin connect. %code%, %url%, %time%.
+  connect-code:
+    - '&r'
+    - '[center]<#8a51c4>&lCONNECT TO EXYLIA LINK'
+    - '&r'
+    - ' <#a89ab5>▎ <#e7cfff>Code <#a89ab5>» <click:copy_to_clipboard:%code%><hover:show_text:''<#e7cfff>Click to copy''><#ffd700>&l%code%</hover></click>'
+    - ' <#a89ab5>▎ <#e7cfff>Approve it at <click:open_url:%url%><hover:show_text:''<#e7cfff>Open the approval page''><#59a4ff>%url%</hover></click>'
+    - ' <#a89ab5>▎ <#e7cfff>Expires in <#59a4ff>%time% ⌚'
+    - '&r'
+    - '<#ff9500>➥ <#e7cfff>Sign in with Discord, pick the network and approve'
+    - '&r'
+  connect-waiting: '[sound:entity.villager.no|0.6|1.0]%prefix% <#e7cfff>A connection code is already waiting for approval.'
+  # %network% is the network's name.
+  connect-done:
+    - '[sound:entity.experience_orb.pickup|0.6|1.4]%prefix% <#8fffc1>Connected to <#ffd700>%network%<#8fffc1>.'
+    - '<#ff9500>➥ <#e7cfff>Run <#59a4ff>/linkadmin connect <#e7cfff>once on every other server and proxy of the network too.'
+  connect-expired: '[sound:entity.villager.no|0.6|1.0]%prefix% <#e7cfff>The code expired. Run <#59a4ff>/linkadmin connect <#e7cfff>again.'
+  connect-failed: '[sound:entity.villager.no|0.6|1.0]%prefix% <#a33b53>Could not reach Exylia Link. <#e7cfff>Try again in a moment.'
+  # /linkadmin status. %state%, %role%, %network%, %server%, %latency%, %rewards%, %error%.
+  status:
+    - '&r'
+    - '[center]<#8a51c4>&lEXYLIA LINK'
+    - '&r'
+    - ' <#a89ab5>▎ <#e7cfff>Connection <#a89ab5>» %state%'
+    - ' <#a89ab5>▎ <#e7cfff>Role <#a89ab5>» %role%'
+    - ' <#a89ab5>▎ <#e7cfff>Network <#a89ab5>» <#ffd700>%network%'
+    - ' <#a89ab5>▎ <#e7cfff>Server id <#a89ab5>» <#59a4ff>%server%'
+    - ' <#a89ab5>▎ <#e7cfff>Latency <#a89ab5>» <#59a4ff>%latency%'
+    - ' <#a89ab5>▎ <#e7cfff>Rewards in progress <#a89ab5>» <#59a4ff>%rewards%'
+    - ' <#a89ab5>▎ <#e7cfff>Last error <#a89ab5>» <#868e96>%error%'
+    - '&r'
+  state-connected: '<#8fffc1>Connected'
+  state-connecting: '<#ff9500>Connecting…'
+  state-not-linked: '<#868e96>Not linked'
+  state-stopped: '<#a33b53>Update ExyliaLink'
+  role-proxy: '<#59a4ff>Proxy <#868e96>(talks to players)'
+  role-backend: '<#59a4ff>Game server'
+  role-backend-behind-proxy: '<#59a4ff>Game server <#868e96>(the proxy talks to players)'
+  none: '—'
+  disconnect-confirm:
+    - '%prefix% <#e7cfff>Disconnect <#ffd700>this server <#e7cfff>from Exylia Link? <#868e96>(the others stay connected)'
+    - '<click:run_command:/linkadmin disconnect confirm><hover:show_text:''<#e7cfff>Disconnect now''><#a33b53>&l[✔ DISCONNECT]</hover></click> <#a89ab5>You have <#59a4ff>30s ⌚ <#a89ab5>to confirm.'
+  disconnected: '[sound:entity.experience_orb.pickup|0.6|1.4]%prefix% <#8fffc1>Disconnected. <#e7cfff>network.dat was deleted on this server.'
+  not-connected: '[sound:entity.villager.no|0.6|1.0]%prefix% <#e7cfff>This server is not connected. Run <#59a4ff>/linkadmin connect<#e7cfff>.'
+  # /linkadmin unlink <player>. %player%.
+  unlink-done: '[sound:entity.experience_orb.pickup|0.6|1.4]%prefix% <#8fffc1>Unlinked <#ffd700>%player%<#8fffc1>.'
+  unlink-none: '[sound:entity.villager.no|0.6|1.0]%prefix% <#ffd700>%player% <#e7cfff>was not linked.'
+  player-not-found: '[sound:entity.villager.no|0.6|1.0]%prefix% <#a33b53>No player called <#ffd700>%player%<#a33b53>.'
+  # Told to online admins when the network's secret was revoked on the web.
+  secret-revoked: '[sound:entity.villager.no|0.6|1.0]%prefix% <#a33b53>Exylia Link revoked this network''s secret. <#e7cfff>Run <#59a4ff>/linkadmin connect <#e7cfff>to link it again.'
+  # Told to online admins when Exylia Link no longer accepts this plugin version.
+  protocol-refused: '[sound:entity.villager.no|0.6|1.0]%prefix% <#a33b53>Exylia Link no longer accepts this ExyliaLink version. <#e7cfff>Update the plugin.'
+  reloaded: '[sound:entity.experience_orb.pickup|0.6|1.4]%prefix% <#8fffc1>Reloaded config.yml and the messages.'
+  reload-failed: '[sound:entity.villager.no|0.6|1.0]%prefix% <#a33b53>Could not reload: <#868e96>%error%'
+importing:
+  running: '[sound:entity.villager.no|0.6|1.0]%prefix% <#e7cfff>An import is already running.'
+  none: '[sound:entity.villager.no|0.6|1.0]%prefix% <#e7cfff>No DiscordSRV links found <#868e96>(no running DiscordSRV, accounts.aof or SQL storage)<#e7cfff>.'
+  # %error% is what went wrong.
+  unreadable: '[sound:entity.villager.no|0.6|1.0]%prefix% <#a33b53>Could not read DiscordSRV''s links: <#868e96>%error%'
+  # %total%, %source%.
+  started: '%prefix% <#e7cfff>Importing <#59a4ff>%total% <#e7cfff>links from <#ffd700>%source%<#e7cfff>…'
+  # %sent%, %total%, %inserted%, %skipped%, %conflicts%.
+  progress: '%prefix% <#e7cfff>Import <#59a4ff>%sent%<#a89ab5>/<#59a4ff>%total% <#a89ab5>» <#8fffc1>%inserted% new <#a89ab5>· <#868e96>%skipped% skipped <#a89ab5>· <#ff9500>%conflicts% conflicts'
+  done:
+    - '&r'
+    - '[sound:entity.experience_orb.pickup|0.6|1.4;center]<#8a51c4>&lDISCORDSRV IMPORT DONE'
+    - '&r'
+    - ' <#a89ab5>▎ <#e7cfff>Links read <#a89ab5>» <#59a4ff>%total%'
+    - ' <#a89ab5>▎ <#e7cfff>Imported <#a89ab5>» <#8fffc1>%inserted%'
+    - ' <#a89ab5>▎ <#e7cfff>Already linked <#a89ab5>» <#868e96>%skipped%'
+    - ' <#a89ab5>▎ <#e7cfff>Conflicts <#a89ab5>» <#ff9500>%conflicts%'
+    - '&r'
+    - '<#ff9500>➥ <#e7cfff>Conflicts are listed on the dashboard and in the console'
+    - '&r'
+  failed: '[sound:entity.villager.no|0.6|1.0]%prefix% <#a33b53>The import stopped at <#59a4ff>%sent%<#a89ab5>/<#59a4ff>%total% <#868e96>(%error%)<#a33b53>. <#e7cfff>Running it again is safe.'
+  backend-only: '[sound:entity.villager.no|0.6|1.0]%prefix% <#e7cfff>DiscordSRV runs on game servers: run this on the server that has it.'
+requirements:
+  # Why the player must link, when the network set no message of its own (%reason%).
+  reason: 'Your rank requires a linked Discord account.'
+  # Sent once the player is known to need a link. %reason%.
+  warning:
+    - '&r'
+    - '[sound:block.note_block.pling|0.5|1.2;center]<#8a51c4>&lLINK REQUIRED'
+    - '&r'
+    - ' <#a89ab5>▎ <#e7cfff>%reason%'
+    - '&r'
+    - '<click:run_command:/link><hover:show_text:''<#e7cfff>Click to get your code''><#ff9500>➥ <#e7cfff>Click here or run <#59a4ff>/link <#e7cfff>to link your Discord</hover></click>'
+    - '&r'
+  # The same in restrict mode, where some commands stay locked until they link.
+  warning-restricted:
+    - '&r'
+    - '[sound:block.note_block.pling|0.5|1.2;center]<#8a51c4>&lLINK REQUIRED'
+    - '&r'
+    - ' <#a89ab5>▎ <#e7cfff>%reason%'
+    - ' <#a89ab5>▎ <#e7cfff>Some commands stay <#a33b53>locked <#e7cfff>until you link.'
+    - '&r'
+    - '<click:run_command:/link><hover:show_text:''<#e7cfff>Click to get your code''><#ff9500>➥ <#e7cfff>Click here or run <#59a4ff>/link <#e7cfff>to link your Discord</hover></click>'
+    - '&r'
+  # Repeated every requirements-reminder-minutes (config.yml) until they link.
+  reminder: '%prefix% <#e7cfff>%reason% <click:run_command:/link><hover:show_text:''<#e7cfff>Click to get your code''><#59a4ff>&n/link</hover></click>'
+  # A locked command was refused.
+  blocked: '[sound:entity.villager.no|0.6|1.0]%prefix% <#a33b53>Link your Discord account first. <click:run_command:/link><hover:show_text:''<#e7cfff>Click to get your code''><#e7cfff>Run <#59a4ff>/link <#e7cfff>to unlock this command.</hover></click>'

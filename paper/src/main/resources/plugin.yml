@@ -1,0 +1,36 @@
+name: ExyliaLink
+version: '${version}'
+main: net.exylia.link.paper.LinkPaper
+api-version: '1.17'
+authors: [ DiGround ]
+website: https://link.exylia.net
+description: Links Minecraft accounts to Discord through Exylia Link.
+
+folia-supported: true
+
+softdepend:
+  - LuckPerms
+  - PlaceholderAPI
+  - DiscordSRV
+
+commands:
+  link:
+    description: Link your Minecraft account to Discord.
+    usage: /link [code|status]
+  unlink:
+    description: Unlink your Minecraft account from Discord.
+    usage: /unlink
+  linkadmin:
+    description: Connect the network to Exylia Link and manage it.
+    usage: /linkadmin <connect|status|disconnect|unlink|import|reload>
+
+permissions:
+  exylialink.link:
+    description: Use /link and /unlink.
+    default: true
+  exylialink.admin:
+    description: Connect the network, unlink other players, import DiscordSRV links and reload the files.
+    default: op
+  exylialink.requirements.bypass:
+    description: Never warned or restricted by the network's linked-account requirements.
+    default: false

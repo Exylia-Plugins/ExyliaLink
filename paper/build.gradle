@@ -1,0 +1,14 @@
+// Compiled against 1.17.1, the oldest version supported; Folia's schedulers and anything newer
+// are reached through a guarded reflective call.
+dependencies {
+    implementation project(':common')
+    compileOnly 'io.papermc.paper:paper-api:1.17.1-R0.1-SNAPSHOT'
+    compileOnly 'net.luckperms:api:5.4'
+    compileOnly 'me.clip:placeholderapi:2.11.6'
+    compileOnly('com.discordsrv:discordsrv:1.30.5') { transitive = false }
+}
+
+processResources {
+    inputs.property('version', project.version)
+    filesMatching('plugin.yml') { expand(version: project.version) }
+}

@@ -1,108 +1,57 @@
+// One jar for every platform: Paper, Spigot and Folia read plugin.yml, BungeeCord and Waterfall
+// bungee.yml, Velocity velocity-plugin.json. Each loads only its own module's main class, so the
+// classes of the other platforms sit in the jar untouched.
 plugins {
     id 'java'
     id 'com.gradleup.shadow' version '8.3.11'
 }
 
-group = 'net.exylia'
-version = '1.0.0'
+allprojects {
+    group = 'net.exylia'
+    version = '1.0.0'
 
-/*
- * ExyliaLib is always the newest one: the latest release on GitHub, or a newer one published to
- * mavenLocal while the library and this plugin change together. The version built against is
- * also the oldest the jar runs on (plugin.yml's exylia-lib), and ExyliaLib keeps itself updated
- * on every server, so building against anything older only hides what a server already has.
- * -PexyliaLibVersion=x.y.z pins one, for a build that has to be reproduced.
- */
-def exyliaLibVersion = providers.gradleProperty('exyliaLibVersion').getOrNull() ?: newestExyliaLib()
-logger.lifecycle("Building against ExyliaLib ${exyliaLibVersion}")
-
-/** The newest of the latest GitHub release and the newest published to mavenLocal. */
-def newestExyliaLib() {
-    def candidates = []
-    try {
-        // The fixed-name asset redirects to the tagged one, which names the version.
-        def connection = new URL('https://github.com/DiGround-s/ExyliaLib/releases/latest/download/ExyliaLib.jar').openConnection()
-        connection.instanceFollowRedirects = false
-        connection.requestMethod = 'HEAD'
-        connection.connectTimeout = 10_000
-        connection.readTimeout = 10_000
-        def tag = (connection.getHeaderField('Location') ?: '') =~ /\/download\/v(\d+\.\d+\.\d+)\//
-        if (tag.find()) candidates << tag.group(1)
-    } catch (IOException offline) {
-        logger.warn("Could not reach GitHub for the latest ExyliaLib: ${offline.message}")
-    }
-    def local = new File(System.getProperty('user.home'), '.m2/repository/net/exylia/ExyliaLib')
-    local.listFiles()?.findAll { it.isDirectory() && it.name ==~ /\d+\.\d+\.\d+/ && new File(it, "ExyliaLib-${it.name}.jar").isFile() }
-            ?.each { candidates << it.name }
-    if (candidates.isEmpty()) {
-        throw new GradleException('No ExyliaLib found: GitHub could not be reached and none is in mavenLocal. '
-                + 'Pass -PexyliaLibVersion=x.y.z to build against a known one.')
-    }
-    return candidates.max { a, b ->
-        def x = a.tokenize('.')*.toInteger()
-        def y = b.tokenize('.')*.toInteger()
-        (0..2).collect { x[it] <=> y[it] }.find { it != 0 } ?: 0
+    repositories {
+        mavenCentral()
+        maven { url = 'https://repo.papermc.io/repository/maven-public/' }
+        // BungeeCord's API snapshots.
+        maven { url = 'https://oss.sonatype.org/content/repositories/snapshots/' }
+        maven { url = 'https://repo.extendedclip.com/releases/' }
+        // DiscordSRV's API, for /linkadmin import discordsrv; never shaded.
+        maven {
+            url = 'https://nexus.scarsz.me/content/groups/public/'
+            content { includeGroup('com.discordsrv') }
+        }
     }
 }
 
-repositories {
-    // A locally published ExyliaLib wins, so a change to both can be built before the library is released.
-    mavenLocal()
-    mavenCentral()
-    maven { url = 'https://repo.papermc.io/repository/maven-public/' }
-    // DiscordSRV's API, for /linkadmin import discordsrv; never shaded.
-    maven {
-        url = 'https://nexus.scarsz.me/content/groups/public/'
-        content { includeGroup('com.discordsrv') }
+subprojects {
+    apply plugin: 'java'
+
+    java {
+        toolchain.languageVersion = JavaLanguageVersion.of(21)
     }
-    // ExyliaLib is attached to every release on GitHub; this reads it from there.
-    ivy {
-        name = 'ExyliaLib releases'
-        url = 'https://github.com/DiGround-s/ExyliaLib/releases/download/'
-        patternLayout { artifact 'v[revision]/[module]-[revision].[ext]' }
-        metadataSources { artifact() }
-        content { includeModule('net.exylia', 'ExyliaLib') }
+
+    // Java 17 bytecode: the oldest runtime Paper 1.17, BungeeCord and Velocity 3 servers run on.
+    tasks.withType(JavaCompile).configureEach {
+        options.encoding = 'UTF-8'
+        options.release.set(17)
+    }
+
+    dependencies {
+        compileOnly 'org.jetbrains:annotations:26.0.2'
+        testImplementation 'org.junit.jupiter:junit-jupiter:5.11.4'
+        testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
+    }
+
+    test {
+        useJUnitPlatform()
     }
 }
 
 dependencies {
-    compileOnly 'io.papermc.paper:paper-api:1.21.4-R0.1-SNAPSHOT'
-    // Installed on the server as its own plugin, never shaded: one copy, one cache.
-    compileOnly "net.exylia:ExyliaLib:${exyliaLibVersion}"
-    compileOnly 'io.github.revxrsal:lamp.common:4.0.0-rc.17'
-    compileOnly 'io.github.revxrsal:lamp.bukkit:4.0.0-rc.17'
-    // Soft dependencies: only touched after a check that the plugin is there.
-    compileOnly 'net.luckperms:api:5.4'
-    compileOnly('com.discordsrv:discordsrv:1.30.5') { transitive = false }
-
-    testImplementation 'org.junit.jupiter:junit-jupiter:5.11.4'
-    testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
-    testImplementation 'com.google.code.gson:gson:2.11.0'
-    // Pure helpers the tested classes call (CommandLabels).
-    testImplementation "net.exylia:ExyliaLib:${exyliaLibVersion}"
-}
-
-java {
-    toolchain.languageVersion = JavaLanguageVersion.of(21)
-}
-
-tasks.withType(JavaCompile).configureEach {
-    options.encoding = 'UTF-8'
-    options.compilerArgs << '-parameters'
-    options.release.set(21)
-}
-
-test {
-    useJUnitPlatform()
-}
-
-processResources {
-    def props = [version: version, exyliaLibVersion: exyliaLibVersion]
-    inputs.properties props
-    filteringCharset 'UTF-8'
-    filesMatching('plugin.yml') {
-        expand props
-    }
+    implementation project(':paper')
+    implementation project(':velocity')
+    implementation project(':bungee')
 }
 
 shadowJar {
@@ -112,12 +61,10 @@ shadowJar {
     if (project.hasProperty('exyliaOutputDir')) {
         destinationDirectory = file("${exyliaOutputDir}/plugins")
     }
-    exclude 'META-INF/versions/**'
+    exclude 'META-INF/maven/**', 'META-INF/versions/**'
 }
 
-tasks.named('build') {
-    dependsOn shadowJar
-}
+tasks.named('build') { dependsOn shadowJar }
 
 // The plain jar keeps its own name, so build/libs holds one ExyliaLink-<version>.jar: the one to install.
 jar {

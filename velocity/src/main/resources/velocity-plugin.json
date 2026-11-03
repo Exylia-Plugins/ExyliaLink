@@ -1,0 +1,12 @@
+{
+  "id": "exylialink",
+  "name": "ExyliaLink",
+  "version": "${version}",
+  "description": "Links Minecraft accounts to Discord through Exylia Link.",
+  "url": "https://link.exylia.net",
+  "authors": ["DiGround"],
+  "dependencies": [
+    { "id": "luckperms", "optional": true }
+  ],
+  "main": "net.exylia.link.velocity.LinkVelocity"
+}

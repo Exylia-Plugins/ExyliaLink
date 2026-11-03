@@ -1,0 +1,21 @@
+# Exylia Link — https://link.exylia.net
+# Almost everything is set on the dashboard; this file only holds what this server must know
+# before it can reach it. The network secret is not here: it lives sealed in network.dat.
+
+# Language of the messages: en or es. Each one is a folder under lang/ you can edit.
+language: en
+
+# This server's id on Exylia Link, shown on the dashboard. Keep it stable and different on every
+# server and proxy of the network: the dashboard knows each one by it. Left empty, a random one is
+# written here on the first start.
+server-id: ''
+
+# Where the plugin links and connects. Leave as is unless Exylia support says otherwise.
+gateway-url: 'https://link-gateway.exylia.net'
+
+# Players in a group the network requires to be linked (set on link.exylia.net) are warned on
+# join and reminded every this many minutes until they link. 0 warns only once.
+requirements-reminder-minutes: 10
+
+# Log connection retries and other details to the console.
+debug: false

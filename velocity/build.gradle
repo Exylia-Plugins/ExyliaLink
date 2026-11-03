@@ -1,0 +1,10 @@
+dependencies {
+    implementation project(':common')
+    compileOnly 'com.velocitypowered:velocity-api:3.4.0'
+    compileOnly 'net.luckperms:api:5.4'
+}
+
+processResources {
+    inputs.property('version', project.version)
+    filesMatching('velocity-plugin.json') { expand(version: project.version) }
+}
