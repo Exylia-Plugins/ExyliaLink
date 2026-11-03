@@ -1,0 +1,43 @@
+# Build output
+build/
+bin/
+dist/
+out/
+target/
+
+# Gradle
+.gradle/
+
+
+# IDE
+.factorypath
+.idea/
+.idea_modules/
+*.iml
+.vscode/
+.settings/
+.classpath
+.project
+
+# System
+.DS_Store
+Thumbs.db
+
+# Logs and temporary files
+*.log
+*.swp
+*.tmp
+*.bak
+*.old
+
+# Credentials — never committed
+*.env
+*.key
+*.pem
+*.jks
+*.keystore
+*.p12
+
+# Local tooling
+.atl/
+.codegraph/
