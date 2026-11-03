@@ -100,3 +100,24 @@ importing:
     - '{warning}➥ {letters}Los conflictos aparecen en el panel y en la consola'
     - '&r'
   failed: '[sound:ENTITY_VILLAGER_NO|0.6|1.0]%prefix% {error}La importación se detuvo en {info}%sent%{letters_black}/{info}%total% {muted}(%error%){error}. {letters}Volver a ejecutarla es seguro.'
+requirements:
+  reason: Tu rango requiere una cuenta de Discord vinculada.
+  warning:
+    - '&r'
+    - '[sound:BLOCK_NOTE_BLOCK_PLING|0.5|1.2;center]{primary}&lVINCULACIÓN OBLIGATORIA'
+    - '&r'
+    - ' {letters_black}▎ {letters}%reason%'
+    - '&r'
+    - '<click:run_command:/link><hover:show_text:''{letters}Clic para obtener tu código''>{warning}➥ {letters}Haz clic aquí o usa {info}/link {letters}para vincular tu Discord</hover></click>'
+    - '&r'
+  warning-restricted:
+    - '&r'
+    - '[sound:BLOCK_NOTE_BLOCK_PLING|0.5|1.2;center]{primary}&lVINCULACIÓN OBLIGATORIA'
+    - '&r'
+    - ' {letters_black}▎ {letters}%reason%'
+    - ' {letters_black}▎ {letters}Algunos comandos seguirán {error}bloqueados {letters}hasta que vincules.'
+    - '&r'
+    - '<click:run_command:/link><hover:show_text:''{letters}Clic para obtener tu código''>{warning}➥ {letters}Haz clic aquí o usa {info}/link {letters}para vincular tu Discord</hover></click>'
+    - '&r'
+  reminder: '%prefix% {letters}%reason% <click:run_command:/link><hover:show_text:''{letters}Clic para obtener tu código''>{info}&n/link</hover></click>'
+  blocked: '[sound:ENTITY_VILLAGER_NO|0.6|1.0]%prefix% {error}Vincula primero tu cuenta de Discord. <click:run_command:/link><hover:show_text:''{letters}Clic para obtener tu código''>{letters}Usa {info}/link {letters}para desbloquear este comando.</hover></click>'

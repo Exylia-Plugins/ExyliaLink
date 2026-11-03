@@ -14,6 +14,7 @@ import net.exylia.exyliaLink.importer.DiscordSrvImport;
 import net.exylia.exyliaLink.link.LinkCache;
 import net.exylia.exyliaLink.link.NetworkStore;
 import net.exylia.exyliaLink.presence.Presence;
+import net.exylia.exyliaLink.requirement.LinkRequirements;
 import net.exylia.exyliaLink.reward.Rewards;
 import net.exylia.lib.config.ConfigFile;
 import net.exylia.lib.config.Configs;
@@ -66,6 +67,7 @@ public final class ExyliaLink extends JavaPlugin {
     private LinkCache cache;
     private Rewards rewards;
     private Presence presence;
+    private LinkRequirements requirements;
     private Lamp<BukkitCommandActor> lamp;
     private Reloads reloads;
 
@@ -86,6 +88,8 @@ public final class ExyliaLink extends JavaPlugin {
         rewards = new Rewards(database, tasks, debug, frame -> connection.send(frame), this::serverId);
         presence = new Presence(this);
         getServer().getPluginManager().registerEvents(presence, this);
+        requirements = new LinkRequirements(this);
+        getServer().getPluginManager().registerEvents(requirements, this);
 
         Placeholders.group(this, "exylialink")
                 .async()
@@ -118,6 +122,7 @@ public final class ExyliaLink extends JavaPlugin {
     public void onDisable() {
         if (connection != null) connection.stop();
         if (presence != null) presence.close();
+        if (requirements != null) requirements.close();
         if (lamp != null) lamp.unregisterAllCommands();
         getServer().getServicesManager().unregisterAll(this);
     }
@@ -138,6 +143,7 @@ public final class ExyliaLink extends JavaPlugin {
                 debug.debug("link.status for " + player + " failed: " + RequestException.of(failure).code());
             } else if (Bukkit.getPlayer(player) != null) {
                 cache.apply(player, LinkCache.Status.of(data, false));
+                requirements.check(player);
             }
         });
     }
@@ -159,6 +165,7 @@ public final class ExyliaLink extends JavaPlugin {
             LinkMessages.Link link = messages.get().link();
             say(player, status.linked() ? link.linked() : link.unlinked(), Values.of("discord", discordLabel(status)));
         }
+        requirements.check(id);
     }
 
     public void secretRevoked() {
@@ -254,4 +261,6 @@ public final class ExyliaLink extends JavaPlugin {
     public LinkCache cache() { return cache; }
     public Rewards rewards() { return rewards; }
     public Presence presence() { return presence; }
+    public LinkRequirements requirements() { return requirements; }
+    public LinkSettings settings() { return settings.get(); }
 }

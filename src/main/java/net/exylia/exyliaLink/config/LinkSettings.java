@@ -18,9 +18,13 @@ public record LinkSettings(
         String serverId,
         @Key("gateway-url")
         @Comment("Where the plugin links and connects. Leave as is unless Exylia support says otherwise.")
-        String gatewayUrl) {
+        String gatewayUrl,
+        @Key("requirements-reminder-minutes")
+        @Comment("Players in a group the network requires to be linked (set on link.exylia.net) are warned")
+        @Comment("on join and reminded every this many minutes until they link. 0 warns only once.")
+        int reminderMinutes) {
 
     public LinkSettings() {
-        this(Languages.DEFAULT, "", "https://link-gateway.exylia.net");
+        this(Languages.DEFAULT, "", "https://link-gateway.exylia.net", 10);
     }
 }

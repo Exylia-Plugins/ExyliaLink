@@ -14,7 +14,8 @@ public record LinkMessages(
         Link link,
         Errors errors,
         Admin admin,
-        Import importing) {
+        Import importing,
+        Requirements requirements) {
 
     /** A spacer line: a blank one is not sent at all. */
     private static final String GAP = "&r";
@@ -22,7 +23,7 @@ public record LinkMessages(
     private static final String NO = "[sound:ENTITY_VILLAGER_NO|0.6|1.0]";
 
     public LinkMessages() {
-        this("{primary}&lEXYLIA LINK {letters_black}•<reset>", new Link(), new Errors(), new Admin(), new Import());
+        this("{primary}&lEXYLIA LINK {letters_black}•<reset>", new Link(), new Errors(), new Admin(), new Import(), new Requirements());
     }
 
     public record Link(
@@ -205,6 +206,42 @@ public record LinkMessages(
                             "{warning}➥ {letters}Conflicts are listed on the dashboard and in the console",
                             "&r"),
                     NO + "%prefix% {error}The import stopped at {info}%sent%{letters_black}/{info}%total% {muted}(%error%){error}. {letters}Running it again is safe.");
+        }
+    }
+
+    public record Requirements(
+            @Comment("Why the player must link, when the network set no message of its own (%reason%).")
+            String reason,
+            @Comment("Sent once the player is known to need a link. %reason%.")
+            List<String> warning,
+            @Comment("The same in restrict mode, where some commands stay locked until they link.")
+            List<String> warningRestricted,
+            @Comment("Repeated every requirements-reminder-minutes (config.yml) until they link.")
+            String reminder,
+            @Comment("A locked command was refused.")
+            String blocked) {
+
+        public Requirements() {
+            this("Your rank requires a linked Discord account.",
+                    List.of(
+                            "&r",
+                            "[sound:BLOCK_NOTE_BLOCK_PLING|0.5|1.2;center]{primary}&lLINK REQUIRED",
+                            "&r",
+                            " {letters_black}▎ {letters}%reason%",
+                            "&r",
+                            "<click:run_command:/link><hover:show_text:'{letters}Click to get your code'>{warning}➥ {letters}Click here or run {info}/link {letters}to link your Discord</hover></click>",
+                            "&r"),
+                    List.of(
+                            "&r",
+                            "[sound:BLOCK_NOTE_BLOCK_PLING|0.5|1.2;center]{primary}&lLINK REQUIRED",
+                            "&r",
+                            " {letters_black}▎ {letters}%reason%",
+                            " {letters_black}▎ {letters}Some commands stay {error}locked {letters}until you link.",
+                            "&r",
+                            "<click:run_command:/link><hover:show_text:'{letters}Click to get your code'>{warning}➥ {letters}Click here or run {info}/link {letters}to link your Discord</hover></click>",
+                            "&r"),
+                    "%prefix% {letters}%reason% <click:run_command:/link><hover:show_text:'{letters}Click to get your code'>{info}&n/link</hover></click>",
+                    NO + "%prefix% {error}Link your Discord account first. <click:run_command:/link><hover:show_text:'{letters}Click to get your code'>{letters}Run {info}/link {letters}to unlock this command.</hover></click>");
         }
     }
 }

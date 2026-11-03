@@ -68,9 +68,20 @@ replacing `{player}` with the player's current name, records the grant id in
 acknowledged again without running, so a resend never pays twice. A grant that needs the player
 online is refused with `player_offline` and comes back on their next join.
 
+## Requirements
+
+Groups that must have a linked account are set on the web (Settings › Requirements) and reach
+every server in `welcome` and `requirements.updated`. A player in one of those LuckPerms groups
+whose link status says unlinked gets a warning with a clickable `/link` (after `link.status` on
+join, and again on a group change or an unlink), then a reminder every
+`requirements-reminder-minutes` (default 10, 0 for none) until they link. In restrict mode the
+listed command roots, plain or `plugin:root`, are refused until then; `/link` never is.
+`exylialink.requirements.bypass` (not granted by default) skips all of it. While the gateway is
+unreachable the plugin keeps the last requirements and statuses it knew and blocks nothing.
+
 ## Files
 
-- `config.yml`: language, `server-id`, `gateway-url`.
+- `config.yml`: language, `server-id`, `gateway-url`, `requirements-reminder-minutes`.
 - `lang/<code>/messages.yml`: every message (English and Spanish shipped).
 - `database.yml`: where the shared tables live (`exylialink_network`, `exylialink_grants`).
 

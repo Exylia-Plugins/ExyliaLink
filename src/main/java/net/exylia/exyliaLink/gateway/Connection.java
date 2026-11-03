@@ -389,6 +389,7 @@ public final class Connection implements WebSocket.Listener {
             case "welcome" -> welcome(frame);
             case "reply" -> reply(frame);
             case "link.updated" -> plugin.linkUpdated(frame);
+            case "requirements.updated" -> plugin.requirements().update(frame);
             case "reward.deliver" -> plugin.rewards().deliver(frame);
             case "error" -> debug.warn("Exylia Link: " + Frames.string(frame, "code") + ": " + Frames.string(frame, "message"));
             default -> debug.debug("Exylia Link: ignored frame " + type);
@@ -404,6 +405,8 @@ public final class Connection implements WebSocket.Listener {
         lastSnapshot = System.currentTimeMillis();
         sendNow(Frames.snapshot(plugin.presence().online()));
         lastPing = 0;
+        // Absent from an older gateway: nothing required.
+        plugin.requirements().update(frame.get("requirements"));
         debug.success("Connected to Exylia Link (" + workspaceName + ").");
         plugin.welcomed();
     }

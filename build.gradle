@@ -78,6 +78,8 @@ dependencies {
     testImplementation 'org.junit.jupiter:junit-jupiter:5.11.4'
     testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
     testImplementation 'com.google.code.gson:gson:2.11.0'
+    // Pure helpers the tested classes call (CommandLabels).
+    testImplementation "net.exylia:ExyliaLib:${exyliaLibVersion}"
 }
 
 java {

@@ -61,6 +61,11 @@ public final class Presence implements Listener {
         return new Frames.OnlinePlayer(player.getUniqueId(), player.getName(), groups);
     }
 
+    /** The groups last reported for an online player here, primary first; empty when unknown. */
+    public @NotNull List<String> known(@NotNull UUID player) {
+        return sent.getOrDefault(player, List.of());
+    }
+
     private List<String> groups(UUID player) {
         try {
             return luckPerms == null ? List.of() : Frames.clip(luckPerms.of(player));
@@ -98,6 +103,7 @@ public final class Presence implements Listener {
             List<String> before = sent.put(player, now);
             if (!now.equals(before)) {
                 plugin.connection().send(Frames.groups(player, now));
+                plugin.requirements().check(player);
             }
         });
     }
