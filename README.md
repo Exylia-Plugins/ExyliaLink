@@ -1,8 +1,12 @@
 # ExyliaLink
 
-The Minecraft side of [Exylia Link](https://link.exylia.net): links Minecraft accounts to Discord
+[![Release](https://img.shields.io/github/v/release/Exylia-Plugins/ExyliaLink)](https://github.com/Exylia-Plugins/ExyliaLink/releases/latest)
+[![Build](https://github.com/Exylia-Plugins/ExyliaLink/actions/workflows/build.yml/badge.svg)](https://github.com/Exylia-Plugins/ExyliaLink/actions/workflows/build.yml)
+[![License: GPL-3.0](https://img.shields.io/badge/license-GPL--3.0-blue)](LICENSE)
+
+Free, open-source Minecraft side of [Exylia Link](https://link.exylia.net): links Minecraft accounts to Discord
 accounts for a whole network, reports who is online (and in which LuckPerms groups) and runs the
-rewards Link grants. Private for now.
+rewards Link grants.
 
 One jar for every platform, Java 17+:
 
@@ -29,7 +33,7 @@ secret now lives in `network.dat` and the grants in `grants.log`, both in the pl
 
 ## Setup
 
-1. Put `ExyliaLink-<version>.jar` in `plugins/` on the proxy and/or every game server.
+1. Download `ExyliaLink.jar` from the [latest release](https://github.com/Exylia-Plugins/ExyliaLink/releases/latest) and put it in `plugins/` on the proxy and/or every game server.
 2. Give each one a stable, unique id: `server-id` in `config.yml` (left empty, a random one is
    written there on the first start).
 3. On each server and proxy run `/linkadmin connect`, open the link it shows, sign in with Discord,
@@ -38,6 +42,18 @@ secret now lives in `network.dat` and the grants in `grants.log`, both in the pl
 4. Optional, on the game server that has DiscordSRV: `/linkadmin import discordsrv`.
 
 Without a network the plugin stays idle and logs "Not connected to Exylia Link"; nothing else breaks.
+
+## Updates
+
+ExyliaLink updates itself from this repository's GitHub releases. It checks shortly after start and
+every 6 hours (GitHub's API, never on a server thread). A newer release of the same major version is
+downloaded, its SHA-256 checked against the release's `ExyliaLink.jar.sha256`, and installed for the
+next restart: on Paper, Spigot and Folia into the server's update folder (`plugins/update/` by
+default) under the running jar's file name, on Velocity and BungeeCord over the running jar. The
+console says once which version a restart applies, and admins (`exylialink.admin`) are told on join.
+It never downgrades, ignores pre-releases, and leaves a new major version for you to install by hand.
+
+Set `auto-update: false` in `config.yml` to only be told about new versions.
 
 ## Proxies and game servers together
 
@@ -116,7 +132,7 @@ enforces them follows [Proxies and game servers together](#proxies-and-game-serv
 
 ## Files
 
-- `config.yml`: `language` (en, es), `server-id`, `gateway-url`, `requirements-reminder-minutes`, `debug`.
+- `config.yml`: `language` (en, es), `server-id`, `gateway-url`, `requirements-reminder-minutes`, `auto-update`, `debug`.
 - `lang/<code>/messages.yml`: every message, copied once and never overwritten; a key missing
   from the file reads from the jar. Colours are `<#rrggbb>` (the Exylia palette by default),
   `&` codes or palette names such as `{primary}`; `<click:…>` and `<hover:show_text:'…'>` work
@@ -137,3 +153,15 @@ enforces them follows [Proxies and game servers together](#proxies-and-game-serv
 
 `./gradlew build` runs the tests and builds `ExyliaLink-<version>.jar` (into `build/libs`, or
 `<exyliaOutputDir>/plugins` when that property is set). The same file goes into a server or a proxy.
+
+## Releases
+
+Every change is released: the version in `build.gradle` is bumped, committed as
+`chore: release <version>` and tagged `v<version>`. Pushing the tag runs
+`.github/workflows/release.yml`, which builds the jar and publishes a GitHub release with
+`ExyliaLink-<version>.jar`, `ExyliaLink.jar` (the fixed name the updater downloads) and
+`ExyliaLink.jar.sha256`. That release is what servers update from.
+
+## License
+
+[GNU General Public License v3.0](LICENSE).

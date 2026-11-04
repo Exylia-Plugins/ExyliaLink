@@ -1,0 +1,32 @@
+name: Release
+
+on:
+  push:
+    tags: [ 'v*' ]
+
+permissions:
+  contents: write
+
+jobs:
+  release:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: 21
+      - uses: gradle/actions/setup-gradle@v4
+      - run: ./gradlew build
+      - name: Publish the release
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          set -euo pipefail
+          version="${GITHUB_REF_NAME#v}"
+          cd build/libs
+          # The fixed name and its checksum are what the plugin's own updater downloads and verifies.
+          cp "ExyliaLink-${version}.jar" ExyliaLink.jar
+          sha256sum ExyliaLink.jar > ExyliaLink.jar.sha256
+          gh release create "$GITHUB_REF_NAME" "ExyliaLink-${version}.jar" ExyliaLink.jar ExyliaLink.jar.sha256 \
+            --title "ExyliaLink ${version}" --generate-notes
