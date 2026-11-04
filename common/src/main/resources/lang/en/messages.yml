@@ -174,3 +174,7 @@ requirements:
   reminder: '%prefix% <#e7cfff>%reason% <click:run_command:/link><hover:show_text:''<#e7cfff>Click to get your code''><#59a4ff>&n/link</hover></click>'
   # A locked command was refused.
   blocked: '[sound:entity.villager.no|0.6|1.0]%prefix% <#a33b53>Link your Discord account first. <click:run_command:/link><hover:show_text:''<#e7cfff>Click to get your code''><#e7cfff>Run <#59a4ff>/link <#e7cfff>to unlock this command.</hover></click>'
+update:
+  # Told to admins (exylialink.admin) on join. %version% (the new one), %current%, %url% (release page).
+  installed: '%prefix% <#e7cfff>ExyliaLink <#8fffc1>%version% <#e7cfff>is installed <#868e96>(running %current%)<#e7cfff>. Restart to apply it.'
+  available: '%prefix% <#e7cfff>ExyliaLink <#8fffc1>%version% <#e7cfff>is available <#868e96>(running %current%)<#e7cfff>. <click:open_url:%url%><hover:show_text:''<#e7cfff>Open the release page''><#59a4ff>&nDownload</hover></click>'

@@ -18,7 +18,7 @@ import java.util.regex.Pattern;
  * secret lives sealed in {@code network.dat}, never in a file an owner might paste somewhere.
  */
 public record Settings(@NotNull String language, @NotNull String serverId, @NotNull String gatewayUrl,
-                       int reminderMinutes, boolean debug) {
+                       int reminderMinutes, boolean autoUpdate, boolean debug) {
 
     public static final String DEFAULT_GATEWAY = "https://link-gateway.exylia.net";
     private static final Pattern SERVER_ID_LINE = Pattern.compile("(?m)^server-id:.*$");
@@ -54,7 +54,8 @@ public record Settings(@NotNull String language, @NotNull String serverId, @NotN
         }
         String gateway = string(yaml, "gateway-url", DEFAULT_GATEWAY);
         return new Settings(string(yaml, "language", "en"), serverId.trim(), gateway.isBlank() ? DEFAULT_GATEWAY : gateway.trim(),
-                minutes, "true".equalsIgnoreCase(string(yaml, "debug", "false")));
+                minutes, !"false".equalsIgnoreCase(string(yaml, "auto-update", "true")),
+                "true".equalsIgnoreCase(string(yaml, "debug", "false")));
     }
 
     private static String string(Map<?, ?> yaml, String key, String fallback) {

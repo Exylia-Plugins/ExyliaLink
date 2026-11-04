@@ -51,6 +51,14 @@ public interface Platform {
     /** Whether LuckPerms is installed and enabled here. */
     boolean luckPerms();
 
+    /**
+     * Where the server swaps in plugin jars on its next start (Bukkit's update folder), or
+     * {@code null} where there is none and an update replaces the running jar (a proxy).
+     */
+    default @Nullable Path updateFolder() {
+        return null;
+    }
+
     /** The plugin object other APIs (LuckPerms' event bus) know this plugin by. */
     @NotNull Object handle();
 }

@@ -147,3 +147,6 @@ requirements:
     - '&r'
   reminder: '%prefix% <#e7cfff>%reason% <click:run_command:/link><hover:show_text:''<#e7cfff>Clic para obtener tu código''><#59a4ff>&n/link</hover></click>'
   blocked: '[sound:entity.villager.no|0.6|1.0]%prefix% <#a33b53>Vincula primero tu cuenta de Discord. <click:run_command:/link><hover:show_text:''<#e7cfff>Clic para obtener tu código''><#e7cfff>Usa <#59a4ff>/link <#e7cfff>para desbloquear este comando.</hover></click>'
+update:
+  installed: '%prefix% <#e7cfff>ExyliaLink <#8fffc1>%version% <#e7cfff>está instalado <#868e96>(en uso %current%)<#e7cfff>. Reinicia para aplicarlo.'
+  available: '%prefix% <#e7cfff>ExyliaLink <#8fffc1>%version% <#e7cfff>está disponible <#868e96>(en uso %current%)<#e7cfff>. <click:open_url:%url%><hover:show_text:''<#e7cfff>Abrir la página de la versión''><#59a4ff>&nDescargar</hover></click>'

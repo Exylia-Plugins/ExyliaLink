@@ -159,6 +159,11 @@ public final class LinkPaper extends JavaPlugin implements Platform, Listener, T
     }
 
     @Override
+    public Path updateFolder() {
+        return Bukkit.getUpdateFolderFile().toPath();
+    }
+
+    @Override
     public void log(@NotNull Level level, @NotNull String message) {
         getLogger().log(level, message);
     }

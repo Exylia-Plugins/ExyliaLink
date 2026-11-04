@@ -17,5 +17,9 @@ gateway-url: 'https://link-gateway.exylia.net'
 # join and reminded every this many minutes until they link. 0 warns only once.
 requirements-reminder-minutes: 10
 
+# New releases are downloaded from GitHub and installed for the next restart (checked on start and
+# every 6 hours). false only tells admins and the console that a new version is out.
+auto-update: true
+
 # Log connection retries and other details to the console.
 debug: false

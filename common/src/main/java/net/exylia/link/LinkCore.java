@@ -20,6 +20,7 @@ import net.exylia.link.store.NetworkStore;
 import net.exylia.link.text.Messages;
 import net.exylia.link.text.Text;
 import net.exylia.link.text.Values;
+import net.exylia.link.update.Updater;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -59,6 +60,7 @@ public final class LinkCore {
     private LinkRequirements requirements;
     private LinkImport importer;
     private LinkCommands commands;
+    private Updater updater;
     /** {@code network.state}: whether a proxy of the network is connected; {@code null} unknown. */
     private volatile Boolean proxyOnNetwork;
 
@@ -85,6 +87,8 @@ public final class LinkCore {
         importer = new LinkImport(this, discordSrv);
         commands = new LinkCommands(this, store, http, importer);
         ExyliaLinkApi.Holder.set(cache);
+        updater = new Updater(this);
+        updater.start();
 
         scheduler.every(1_000, 1_000, () -> {
             connection.tick();
@@ -144,6 +148,7 @@ public final class LinkCore {
     public void joined(@NotNull UUID uuid, @NotNull String name, @Nullable String server) {
         presence.joined(uuid, name, server);
         refreshStatus(uuid);
+        platform.player(uuid).ifPresent(updater::greet);
     }
 
     public void quit(@NotNull UUID uuid) {
