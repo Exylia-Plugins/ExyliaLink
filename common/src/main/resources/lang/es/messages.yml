@@ -1,4 +1,4 @@
-prefix: '{primary}&lEXYLIA LINK {letters_black}•<reset>'
+prefix: '{primary}&lLINK {letters_black}•<reset>'
 link:
   code:
     - '&r'

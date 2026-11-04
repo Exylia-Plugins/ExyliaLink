@@ -2,7 +2,7 @@
 # '&r' sends a blank one. Colours: <#rrggbb>, &-codes, {primary}-style palette names. Clicks and
 # hovers: <click:run_command:/link>…</click>, <hover:show_text:'…'>…</hover>. A line may start with
 # [sound:<key>|<volume>|<pitch>] (played to that player on game servers) and/or [center].
-prefix: '{primary}&lEXYLIA LINK {letters_black}•<reset>'
+prefix: '{primary}&lLINK {letters_black}•<reset>'
 link:
   # /link: the code to use in Discord. %code%, %url% (the network's link page), %time%.
   code:

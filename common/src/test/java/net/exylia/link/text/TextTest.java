@@ -59,7 +59,7 @@ class TextTest {
     void everyBundledMessageParses() {
         Messages messages = Messages.bundled();
         assertFalse(messages.lines("link.code", Values.of("code", "ACD347").put("url", "https://l").put("time", "5m")).isEmpty());
-        assertTrue(messages.lines("admin.connect-done", Values.of()).get(0).plain().contains("EXYLIA LINK"));
+        assertTrue(messages.lines("admin.connect-done", Values.of()).get(0).plain().startsWith("LINK •"));
         assertTrue(messages.lines("missing.key", Values.of()).isEmpty());
     }
 }
