@@ -8,6 +8,7 @@ import net.exylia.link.gateway.Frames;
 import net.exylia.link.gateway.GatewayHttp;
 import net.exylia.link.gateway.RequestException;
 import net.exylia.link.importer.LinkImport;
+import net.exylia.link.link.Approvals;
 import net.exylia.link.link.LinkCache;
 import net.exylia.link.link.Presence;
 import net.exylia.link.platform.Platform;
@@ -55,6 +56,7 @@ public final class LinkCore {
     private GatewayHttp http;
     private Connection connection;
     private LinkCache cache;
+    private Approvals approvals;
     private Rewards rewards;
     private Presence presence;
     private LinkRequirements requirements;
@@ -80,7 +82,8 @@ public final class LinkCore {
         journal = new GrantJournal(platform.dataFolder().resolve("grants.log"));
         http = new GatewayHttp(() -> settings.gatewayUrl(), "ExyliaLink/" + pluginVersion());
         connection = new Connection(this, store, http);
-        cache = new LinkCache(connection::welcomed);
+        approvals = new Approvals(this);
+        cache = new LinkCache(connection::welcomed, approvals);
         rewards = new Rewards(this, journal);
         requirements = new LinkRequirements(this);
         presence = new Presence(this);
@@ -93,6 +96,7 @@ public final class LinkCore {
         scheduler.every(1_000, 1_000, () -> {
             connection.tick();
             requirements.tick();
+            approvals.tick();
         });
         scheduler.every(COMPACT_EVERY_MILLIS, COMPACT_EVERY_MILLIS, () -> {
             try {
@@ -107,6 +111,7 @@ public final class LinkCore {
 
     public void disable() {
         ExyliaLinkApi.Holder.set(null);
+        if (approvals != null) approvals.close();
         if (connection != null) connection.stop();
         if (presence != null) presence.close();
         if (requirements != null) requirements.close();
@@ -153,6 +158,7 @@ public final class LinkCore {
 
     public void quit(@NotNull UUID uuid) {
         presence.quit(uuid);
+        approvals.cancel(uuid);
         cache.forget(uuid);
         requirements.forget(uuid);
         commands.forget(uuid);
@@ -355,6 +361,7 @@ public final class LinkCore {
     public Messages messages() { return messages; }
     public Connection connection() { return connection; }
     public LinkCache cache() { return cache; }
+    public Approvals approvals() { return approvals; }
     public Rewards rewards() { return rewards; }
     public Presence presence() { return presence; }
     public LinkRequirements requirements() { return requirements; }

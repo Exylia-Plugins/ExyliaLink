@@ -36,3 +36,35 @@ public final class BuildConstants {
     }
 }
 sourceSets.main.java.srcDir(generateConstants.map { constantsDir })
+
+// `net.exylia:ExyliaLink-api`: only net.exylia.link.api, for plugins that compile against the API
+// (compileOnly) and find the classes in ExyliaLink's jar at runtime. Published to mavenLocal with
+// the plugin's version; nothing else of the plugin is a contract.
+apply plugin: 'maven-publish'
+
+def apiJar = tasks.register('apiJar', Jar) {
+    archiveBaseName.set('ExyliaLink-api')
+    from(sourceSets.main.output) {
+        include 'net/exylia/link/api/**'
+    }
+}
+
+def apiSourcesJar = tasks.register('apiSourcesJar', Jar) {
+    archiveBaseName.set('ExyliaLink-api')
+    archiveClassifier.set('sources')
+    from(sourceSets.main.allJava) {
+        include 'net/exylia/link/api/**'
+    }
+}
+
+publishing {
+    publications {
+        api(MavenPublication) {
+            groupId = 'net.exylia'
+            artifactId = 'ExyliaLink-api'
+            version = project.version
+            artifact(apiJar)
+            artifact(apiSourcesJar)
+        }
+    }
+}

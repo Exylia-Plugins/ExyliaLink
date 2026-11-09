@@ -151,6 +151,9 @@ importing:
 requirements:
   # Why the player must link, when the network set no message of its own (%reason%).
   reason: 'Your rank requires a linked Discord account.'
+  # Shown on screen with the warning; leave the title empty for no title.
+  title: '<#8a51c4>&lLINK REQUIRED'
+  subtitle: '<#e7cfff>Run <#59a4ff>/link <#e7cfff>to link your Discord'
   # Sent once the player is known to need a link. %reason%.
   warning:
     - '&r'

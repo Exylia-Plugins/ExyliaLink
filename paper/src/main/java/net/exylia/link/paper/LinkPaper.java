@@ -260,6 +260,15 @@ public final class LinkPaper extends JavaPlugin implements Platform, Listener, T
                 }
             });
         }
+
+        @Override
+        public void title(@NotNull String title, @NotNull String subtitle) {
+            Schedulers.runAt(LinkPaper.this, player, () -> {
+                if (player.isOnline()) {
+                    player.sendTitle(title, subtitle, 10, 70, 20);
+                }
+            });
+        }
     }
 
     private record ConsoleSender(CommandSender sender) implements Sender {

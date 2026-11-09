@@ -18,4 +18,11 @@ public interface Sender {
 
     /** Delivered on the thread that owns the receiver; the sound is played to the player only, where the platform can. */
     void send(@NotNull Text.Line line);
+
+    /**
+     * A title and subtitle over the player's screen, already formatted (legacy colour codes); a
+     * console ignores it. Either may be empty.
+     */
+    default void title(@NotNull String title, @NotNull String subtitle) {
+    }
 }

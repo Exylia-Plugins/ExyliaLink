@@ -127,6 +127,9 @@ importing:
   failed: '[sound:entity.villager.no|0.6|1.0]%prefix% <#a33b53>La importación se detuvo en <#59a4ff>%sent%<#a89ab5>/<#59a4ff>%total% <#868e96>(%error%)<#a33b53>. <#e7cfff>Volver a ejecutarla es seguro.'
   backend-only: '[sound:entity.villager.no|0.6|1.0]%prefix% <#e7cfff>DiscordSRV funciona en los servidores de juego: ejecútalo en el que lo tiene.'
 requirements:
+  # Mostrado en pantalla junto al aviso; deja el título vacío para no mostrarlo.
+  title: '<#8a51c4>&lVINCULACIÓN REQUERIDA'
+  subtitle: '<#e7cfff>Usa <#59a4ff>/link <#e7cfff>para vincular tu Discord'
   reason: Tu rango requiere una cuenta de Discord vinculada.
   warning:
     - '&r'

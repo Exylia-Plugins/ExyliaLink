@@ -95,6 +95,7 @@ PlaceholderAPI on game servers, from the online player's cached status (never a 
 | `%exylialink_linked%` | `true` / `false` |
 | `%exylialink_discord_name%` | Discord username, empty when not linked or unknown |
 | `%exylialink_discord_id%` | Discord id, empty when not linked |
+| `%exylialink_boosting%` | `true` / `false`: the linked account boosts a Discord server of the network |
 
 ## API
 
@@ -105,8 +106,33 @@ if (link != null) {
 }
 ```
 
-`isLinked`, `discordId`, `discordName` (players online here) and `isConnected`, on every platform.
-On Bukkit it is also registered in the ServicesManager. Add ExyliaLink as a soft dependency.
+`isLinked`, `discordId`, `discordName`, `isBoosting` (players online here) and `isConnected`, on
+every platform. On Bukkit it is also registered in the ServicesManager. Add ExyliaLink as a soft
+dependency and compile against `net.exylia:ExyliaLink-api:<version>` (mavenLocal, published by
+`./gradlew :common:publishToMavenLocal`; the classes are in ExyliaLink's jar at runtime).
+
+### Login approvals
+
+A second factor answered in Discord, for login or staff plugins (ExyliaStaff's 2FA uses it): the
+linked account gets a DM from the Link bot with **Yes, it was me** and **No, block it**.
+
+```java
+link.requestLoginApproval(uuid, name, address, "Survival").thenAccept(decision -> {
+    if (decision == ApprovalDecision.APPROVED) ...      // let them in
+    else if (decision.fallback()) ...                    // NOT_LINKED, UNAVAILABLE, UNDELIVERABLE: ask another way
+    else ...                                             // DENIED, EXPIRED, CANCELLED: refuse
+});
+```
+
+The future completes within about two minutes and never fails: every outcome is an
+`ApprovalDecision`, and only `APPROVED` means yes. The address is stored masked by Link. A player
+who leaves has their request cancelled; `cancelLoginApproval` does the same by hand.
+
+### Boost perks
+
+Link knows whether the linked member boosts a Discord server of the network (`isBoosting`,
+`%exylialink_boosting%`). Perks for boosters are a Link reward rule with the **Boost active**
+trigger (a LuckPerms group, a rank, a kit, reverted when the boost ends), not code in a plugin.
 
 ## Rewards
 

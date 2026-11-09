@@ -27,10 +27,12 @@ import net.kyori.adventure.text.event.ClickEvent;
 import net.kyori.adventure.text.event.HoverEvent;
 import net.kyori.adventure.text.format.TextColor;
 import net.kyori.adventure.text.format.TextDecoration;
+import net.kyori.adventure.title.Title;
 import org.jetbrains.annotations.NotNull;
 import org.slf4j.Logger;
 
 import java.nio.file.Path;
+import java.time.Duration;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
@@ -280,6 +282,12 @@ public final class LinkVelocity implements Platform {
         @Override
         public void send(@NotNull Text.Line line) {
             player.sendMessage(component(line.spans()));
+        }
+
+        @Override
+        public void title(@NotNull String title, @NotNull String subtitle) {
+            player.showTitle(Title.title(component(Text.spans(title)), component(Text.spans(subtitle)),
+                    Title.Times.times(Duration.ofMillis(500), Duration.ofMillis(3_500), Duration.ofMillis(1_000))));
         }
     }
 

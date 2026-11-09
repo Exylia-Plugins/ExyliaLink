@@ -8,7 +8,8 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 /**
- * {@code %exylialink_linked%}, {@code %exylialink_discord_name%}, {@code %exylialink_discord_id%}:
+ * {@code %exylialink_linked%}, {@code %exylialink_discord_name%}, {@code %exylialink_discord_id%},
+ * {@code %exylialink_boosting%}:
  * from the online player's cached status, never a network call. Only loaded when PlaceholderAPI is enabled.
  */
 final class PapiExpansion extends PlaceholderExpansion {
@@ -45,6 +46,7 @@ final class PapiExpansion extends PlaceholderExpansion {
             case "linked" -> String.valueOf(player != null && cache.isLinked(player.getUniqueId()));
             case "discord_name" -> player == null ? "" : cache.discordName(player.getUniqueId()).orElse("");
             case "discord_id" -> player == null ? "" : cache.discordId(player.getUniqueId()).orElse("");
+            case "boosting" -> String.valueOf(player != null && cache.isBoosting(player.getUniqueId()));
             default -> null;
         };
     }

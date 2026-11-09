@@ -8,6 +8,7 @@ import net.exylia.link.text.BungeeChat;
 import net.exylia.link.text.Text;
 import net.exylia.link.text.Values;
 import net.md_5.bungee.api.CommandSender;
+import net.md_5.bungee.api.ProxyServer;
 import net.md_5.bungee.api.connection.ProxiedPlayer;
 import net.md_5.bungee.api.event.ChatEvent;
 import net.md_5.bungee.api.event.PlayerDisconnectEvent;
@@ -213,6 +214,15 @@ public final class LinkBungee extends Plugin implements Platform, Listener {
         @Override
         public void send(@NotNull Text.Line line) {
             player.sendMessage(BungeeChat.components(line.spans()));
+        }
+
+        @Override
+        public void title(@NotNull String title, @NotNull String subtitle) {
+            ProxyServer.getInstance().createTitle()
+                    .title(BungeeChat.components(Text.spans(title)))
+                    .subTitle(BungeeChat.components(Text.spans(subtitle)))
+                    .fadeIn(10).stay(70).fadeOut(20)
+                    .send(player);
         }
     }
 

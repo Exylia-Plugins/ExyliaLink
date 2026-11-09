@@ -9,32 +9,36 @@ import org.jetbrains.annotations.Nullable;
 import java.util.Map;
 import java.util.Optional;
 import java.util.UUID;
+import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.function.BooleanSupplier;
 
 /**
  * The link status of every player online here: filled by {@code link.status} on join, kept fresh
  * by {@code link.updated} and by this server's own replies, dropped on quit. Placeholders and the
- * API read only this; nothing here asks the network.
+ * API read only this; nothing here asks the network, except the login approvals it hands to
+ * {@link Approvals}.
  */
 public final class LinkCache implements ExyliaLinkApi {
 
-    public record Status(boolean linked, @Nullable String discordId, @Nullable String discordName) {
-        public static final Status UNLINKED = new Status(false, null, null);
+    public record Status(boolean linked, @Nullable String discordId, @Nullable String discordName, boolean boosting) {
+        public static final Status UNLINKED = new Status(false, null, null, false);
 
         /** From {@code link.status} data, a {@code link.updated} frame or a {@code code.redeem} reply (linked). */
         public static Status of(JsonObject json, boolean linkedByDefault) {
             boolean linked = json.has("linked") ? Frames.bool(json, "linked") : linkedByDefault;
-            return linked ? new Status(true, Frames.stringOrNull(json, "discordId"), Frames.stringOrNull(json, "discordName"))
+            return linked ? new Status(true, Frames.stringOrNull(json, "discordId"), Frames.stringOrNull(json, "discordName"), Frames.bool(json, "boosting"))
                     : UNLINKED;
         }
     }
 
     private final Map<UUID, Status> statuses = new ConcurrentHashMap<>();
     private final BooleanSupplier connected;
+    private final Approvals approvals;
 
-    public LinkCache(@NotNull BooleanSupplier connected) {
+    public LinkCache(@NotNull BooleanSupplier connected, @NotNull Approvals approvals) {
         this.connected = connected;
+        this.approvals = approvals;
     }
 
     /**
@@ -73,7 +77,24 @@ public final class LinkCache implements ExyliaLinkApi {
     }
 
     @Override
+    public boolean isBoosting(@NotNull UUID player) {
+        Status status = statuses.get(player);
+        return status != null && status.linked() && status.boosting();
+    }
+
+    @Override
     public boolean isConnected() {
         return connected.getAsBoolean();
+    }
+
+    @Override
+    public @NotNull CompletableFuture<ApprovalDecision> requestLoginApproval(@NotNull UUID player, @NotNull String name,
+                                                                             @Nullable String address, @Nullable String context) {
+        return approvals.request(player, name, address, context);
+    }
+
+    @Override
+    public void cancelLoginApproval(@NotNull UUID player) {
+        approvals.cancel(player);
     }
 }

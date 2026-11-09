@@ -4,6 +4,7 @@ import com.google.gson.JsonElement;
 import net.exylia.link.LinkCore;
 import net.exylia.link.link.LinkCache;
 import net.exylia.link.platform.Sender;
+import net.exylia.link.text.Text;
 import net.exylia.link.text.Values;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -74,6 +75,11 @@ public final class LinkRequirements {
         Requirements requirements = current;
         plugin.say(player.get(), requirements.mode() == Requirements.Mode.RESTRICT
                 ? "requirements.warning-restricted" : "requirements.warning", reason(requirements));
+        // The title is the part a player cannot miss; an empty title in messages.yml turns it off.
+        String title = plugin.messages().text("requirements.title");
+        if (!title.isBlank()) {
+            player.get().title(Text.legacy(Text.spans(title)), Text.legacy(Text.spans(plugin.messages().text("requirements.subtitle"))));
+        }
     }
 
     /** Every second: the reminders that are due. */

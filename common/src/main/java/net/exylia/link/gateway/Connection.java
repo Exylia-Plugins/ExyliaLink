@@ -392,6 +392,7 @@ public final class Connection implements WebSocket.Listener {
             case "requirements.updated" -> plugin.requirements().update(frame);
             case "network.state" -> plugin.networkState(Frames.bool(frame, "proxy"));
             case "reward.deliver" -> plugin.rewards().deliver(frame);
+            case "approval.decided" -> plugin.approvals().decided(frame);
             case "error" -> plugin.warn("Exylia Link: " + Frames.string(frame, "code") + ": " + Frames.string(frame, "message"));
             default -> plugin.debug("Exylia Link: ignored frame " + type);
         }
