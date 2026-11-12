@@ -30,3 +30,15 @@ jobs:
           sha256sum ExyliaLink.jar > ExyliaLink.jar.sha256
           gh release create "$GITHUB_REF_NAME" "ExyliaLink-${version}.jar" ExyliaLink.jar ExyliaLink.jar.sha256 \
             --title "ExyliaLink ${version}" --generate-notes
+
+  # Mirrors the release above to Modrinth; skipped while MODRINTH_TOKEN or the project id is unset.
+  modrinth:
+    needs: release
+    uses: Exylia-Plugins/.github/.github/workflows/modrinth.yml@main
+    with:
+      version: ${{ github.ref_name }}
+      name: ExyliaLink
+      project-id: ${{ vars.MODRINTH_PROJECT_ID }}
+      loaders: '["bukkit","spigot","paper","purpur","folia","velocity","bungeecord","waterfall"]'
+      game-versions: '["26.3","26.2","26.1.2","26.1.1","26.1","1.21.11","1.21.10","1.21.9","1.21.8","1.21.7","1.21.6","1.21.5","1.21.4","1.21.3","1.21.2","1.21.1","1.21","1.20.6","1.20.5","1.20.4","1.20.3","1.20.2","1.20.1","1.20","1.19.4","1.19.3","1.19.2","1.19.1","1.19","1.18.2","1.18.1","1.18","1.17.1","1.17"]'
+    secrets: inherit

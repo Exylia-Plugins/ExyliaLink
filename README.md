@@ -2,6 +2,7 @@
 
 [![Release](https://img.shields.io/github/v/release/Exylia-Plugins/ExyliaLink)](https://github.com/Exylia-Plugins/ExyliaLink/releases/latest)
 [![Build](https://github.com/Exylia-Plugins/ExyliaLink/actions/workflows/build.yml/badge.svg)](https://github.com/Exylia-Plugins/ExyliaLink/actions/workflows/build.yml)
+[![Modrinth](https://img.shields.io/modrinth/v/exylialink)](https://modrinth.com/plugin/exylialink)
 [![License: GPL-3.0](https://img.shields.io/badge/license-GPL--3.0-blue)](LICENSE)
 
 Free, open-source Minecraft side of [Exylia Link](https://link.exylia.net): links Minecraft accounts to Discord
@@ -187,7 +188,9 @@ Every change is released: the version in `build.gradle` is bumped, committed as
 `chore: release <version>` and tagged `v<version>`. Pushing the tag runs
 `.github/workflows/release.yml`, which builds the jar and publishes a GitHub release with
 `ExyliaLink-<version>.jar`, `ExyliaLink.jar` (the fixed name the updater downloads) and
-`ExyliaLink.jar.sha256`. That release is what servers update from.
+`ExyliaLink.jar.sha256`. That release is what servers update from; the same workflow then
+uploads the jar to [Modrinth](https://modrinth.com/plugin/exylialink) (project id in the repo
+variable `MODRINTH_PROJECT_ID`).
 
 ## License
 
