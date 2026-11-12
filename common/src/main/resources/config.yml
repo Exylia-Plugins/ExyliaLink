@@ -6,8 +6,9 @@
 language: en
 
 # This server's id on Exylia Link, shown on the dashboard. Keep it stable and different on every
-# server and proxy of the network: the dashboard knows each one by it. Left empty, a random one is
-# written here on the first start.
+# server and proxy of the network: the dashboard knows each one by it. Left empty, the first start
+# writes one here: ExyliaLib's database.redis.server-id when that is set, else 'proxy' on a proxy,
+# else a random one. With more than one proxy, give each its own.
 server-id: ''
 
 # Where the plugin links and connects. Leave as is unless Exylia support says otherwise.

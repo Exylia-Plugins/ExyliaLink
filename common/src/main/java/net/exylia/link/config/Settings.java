@@ -24,10 +24,11 @@ public record Settings(@NotNull String language, @NotNull String serverId, @NotN
     private static final Pattern SERVER_ID_LINE = Pattern.compile("(?m)^server-id:.*$");
 
     /**
-     * Writes the default file when there is none. A blank {@code server-id} gets a random one,
-     * written back so it stays the same across restarts.
+     * Writes the default file when there is none. A blank {@code server-id} is taken from
+     * ExyliaLib's {@code database.redis.server-id} when that is set, else {@code proxy} on a proxy,
+     * else a random one; whichever it is gets written back so it stays the same across restarts.
      */
-    public static @NotNull Settings load(@NotNull Path folder) throws IOException {
+    public static @NotNull Settings load(@NotNull Path folder, boolean proxy) throws IOException {
         Path file = folder.resolve("config.yml");
         if (!Files.exists(file)) {
             Files.createDirectories(folder);
@@ -40,10 +41,10 @@ public record Settings(@NotNull String language, @NotNull String serverId, @NotN
         Map<?, ?> yaml = root instanceof Map<?, ?> map ? map : Map.of();
         String serverId = string(yaml, "server-id", "");
         if (serverId.isBlank()) {
-            serverId = "server-" + randomSuffix();
-            String line = "server-id: '" + serverId + "'";
+            serverId = fallbackId(folder, proxy);
+            String line = "server-id: '" + serverId.replace("'", "''") + "'";
             Matcher existing = SERVER_ID_LINE.matcher(text);
-            text = existing.find() ? existing.replaceFirst(line) : text + "\n" + line + "\n";
+            text = existing.find() ? existing.replaceFirst(Matcher.quoteReplacement(line)) : text + "\n" + line + "\n";
             Files.writeString(file, text, StandardCharsets.UTF_8);
         }
         int minutes;
@@ -56,6 +57,24 @@ public record Settings(@NotNull String language, @NotNull String serverId, @NotN
         return new Settings(string(yaml, "language", "en"), serverId.trim(), gateway.isBlank() ? DEFAULT_GATEWAY : gateway.trim(),
                 minutes, !"false".equalsIgnoreCase(string(yaml, "auto-update", "true")),
                 "true".equalsIgnoreCase(string(yaml, "debug", "false")));
+    }
+
+    /** The id ExyliaLib already gives this server, so a network names each server once. */
+    private static String fallbackId(Path folder, boolean proxy) {
+        Path lib = folder.toAbsolutePath().getParent().resolve("ExyliaLib").resolve("database.yml");
+        try {
+            if (Files.isRegularFile(lib) && new Yaml().load(Files.readString(lib, StandardCharsets.UTF_8)) instanceof Map<?, ?> root
+                    && root.get("database") instanceof Map<?, ?> database && database.get("redis") instanceof Map<?, ?> redis) {
+                String id = string(redis, "server-id", "").trim();
+                // server-1 is ExyliaLib's shipped default: every server that never set it shares it.
+                if (!id.isEmpty() && !id.equals("server-1")) {
+                    return id;
+                }
+            }
+        } catch (IOException | RuntimeException unreadable) {
+            // A broken ExyliaLib file is not ours to report; fall through to our own default.
+        }
+        return proxy ? "proxy" : "server-" + randomSuffix();
     }
 
     private static String string(Map<?, ?> yaml, String key, String fallback) {

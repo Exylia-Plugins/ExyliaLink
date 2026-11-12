@@ -76,7 +76,7 @@ public final class LinkCore {
      * @throws IOException when the plugin folder cannot be written: the plugin should not enable
      */
     public void enable(@Nullable Callable<LinkImport.Read> discordSrv) throws IOException {
-        settings = Settings.load(platform.dataFolder());
+        settings = Settings.load(platform.dataFolder(), proxy());
         loadMessages();
         store = new NetworkStore(platform.dataFolder().resolve("network.dat"));
         journal = new GrantJournal(platform.dataFolder().resolve("grants.log"));
@@ -138,7 +138,7 @@ public final class LinkCore {
     public void reload(@NotNull Sender sender) {
         scheduler.async(() -> {
             try {
-                settings = Settings.load(platform.dataFolder());
+                settings = Settings.load(platform.dataFolder(), proxy());
                 loadMessages();
                 say(sender, "admin.reloaded", Values.of());
             } catch (IOException | RuntimeException failure) {

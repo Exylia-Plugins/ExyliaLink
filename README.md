@@ -34,8 +34,9 @@ secret now lives in `network.dat` and the grants in `grants.log`, both in the pl
 ## Setup
 
 1. Download `ExyliaLink.jar` from the [latest release](https://github.com/Exylia-Plugins/ExyliaLink/releases/latest) and put it in `plugins/` on the proxy and/or every game server.
-2. Give each one a stable, unique id: `server-id` in `config.yml` (left empty, a random one is
-   written there on the first start).
+2. Give each one a stable, unique id: `server-id` in `config.yml`. Left empty, the first start
+   writes ExyliaLib's `database.redis.server-id` there when it is set, `proxy` on a proxy, or else
+   a random one. With more than one proxy, give each its own.
 3. On each server and proxy run `/linkadmin connect`, open the link it shows, sign in with Discord,
    pick the network and approve. Every install keeps its own secret; linking one never disconnects
    the others.
