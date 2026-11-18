@@ -2,7 +2,7 @@
 # Almost everything is set on the dashboard; this file only holds what this server must know
 # before it can reach it. The network secret is not here: it lives sealed in network.dat.
 
-# Language of the messages: en or es. Each one is a folder under lang/ you can edit.
+# Language of the messages: en, es, fr, pt, ru or tr. Each one is a folder under lang/ you can edit.
 language: en
 
 # This server's id on Exylia Link, shown on the dashboard. Keep it stable and different on every

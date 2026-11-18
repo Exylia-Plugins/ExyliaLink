@@ -16,7 +16,7 @@ import java.util.List;
 import java.util.Map;
 
 /**
- * {@code lang/<code>/messages.yml}: every line the plugin says. The jar's English and Spanish files
+ * {@code lang/<code>/messages.yml}: every line the plugin says. The jar's bundled language files
  * are copied to the plugin folder once and never overwritten; a key missing from the server's file
  * reads from the jar's file of the same language, then from the jar's English, so an update that
  * adds a message works without touching what the owner changed.
@@ -26,7 +26,7 @@ import java.util.Map;
  */
 public final class Messages {
 
-    public static final List<String> LANGUAGES = List.of("en", "es");
+    public static final List<String> LANGUAGES = List.of("en", "es", "fr", "pt", "ru", "tr");
 
     private final Map<String, Object> own;
     private final Map<String, Object> bundled;
